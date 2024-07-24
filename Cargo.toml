@@ -1,0 +1,16 @@
+[package]
+name = "timelapse"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.86"
+chrono = "0.4.38"
+clap = { version = "4.5.9", features = ["derive"] }
+ctrlc = { version = "3.4.4", features = ["termination"] }
+env_logger = "0.11.3"
+log = "0.4.22"
+nix = { version = "0.29.0", features = ["fs"] }
+serde = { version = "1.0.204", features = ["derive"] }
+toml = "0.8.15"
+ureq = "2.10.0"
