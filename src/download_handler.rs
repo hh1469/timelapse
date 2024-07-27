@@ -61,7 +61,7 @@ impl DownloadHandler {
         f.flush()?;
 
         if let Err(e) = link_snapshot(instance_name, &pic, snapshot_location) {
-            log::error!("{}", e);
+            log::error!("link error: {}", e);
         }
 
         Ok(())
@@ -81,9 +81,7 @@ fn link_snapshot(
     link_to.push(snapshot_location);
     link_to.push(format!("{}.jpg", instance_name));
 
-    if link_to.exists() {
-        std::fs::remove_file(link_to.clone())?;
-    }
+    let _ = std::fs::remove_file(link_to.clone());
 
     std::fs::soft_link(pic_from, link_to)?;
 
