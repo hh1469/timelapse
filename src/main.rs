@@ -23,6 +23,8 @@ struct Cli {
     #[arg(short, long)]
     picture_folder: PathBuf,
     #[arg(short, long)]
+    current_picture_folder: PathBuf,
+    #[arg(short, long)]
     video_folder: String,
     #[arg(short, long)]
     status_file: PathBuf,
@@ -64,6 +66,10 @@ fn main() -> anyhow::Result<()> {
 
     if !cli.picture_folder.exists() {
         std::fs::create_dir_all(&cli.picture_folder)?;
+    }
+
+    if !cli.current_picture_folder.exists() {
+        std::fs::create_dir_all(&cli.current_picture_folder)?;
     }
 
     let video_folder = Path::new(&cli.video_folder);
@@ -117,7 +123,7 @@ fn main() -> anyhow::Result<()> {
             status.get_index(),
             &cli.url,
             &cli.picture_folder,
-            video_folder,
+            &cli.current_picture_folder,
         ) {
             log::error!("{}", e);
             sleep = Duration::from_secs(1);
