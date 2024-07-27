@@ -23,7 +23,14 @@ impl DownloadHandler {
         Self { agent }
     }
 
-    pub fn make_picture(&self, index: u32, url: &str, path_to: &Path) -> anyhow::Result<()> {
+    pub fn make_picture(
+        &self,
+        instance_name: &str,
+        index: u32,
+        url: &str,
+        path_to: &Path,
+        snapshot_location: &Path,
+    ) -> anyhow::Result<()> {
         log::info!("try to make picture with index {}", index);
         let mut reader = self.agent.get(url).call()?.into_reader();
         let mut buf: Vec<u8> = vec![];
@@ -46,12 +53,39 @@ impl DownloadHandler {
                 .write(true)
                 .append(false)
                 .truncate(true)
-                .open(pic),
-            false => std::fs::File::create(pic),
+                .open(pic.clone()),
+            false => std::fs::File::create(pic.clone()),
         }?;
 
         f.write_all(&buf)?;
         f.flush()?;
+
+        if let Err(e) = link_snapshot(instance_name, &pic, snapshot_location) {
+            log::error!("{}", e);
+        }
+
         Ok(())
     }
+}
+
+fn link_snapshot(
+    instance_name: &str,
+    pic_from: &Path,
+    snapshot_location: &Path,
+) -> anyhow::Result<()> {
+    if !snapshot_location.exists() {
+        std::fs::create_dir_all(snapshot_location)?;
+    }
+
+    let mut link_to = PathBuf::new();
+    link_to.push(snapshot_location);
+    link_to.push(format!("{}.jpg", instance_name));
+
+    if link_to.exists() {
+        std::fs::remove_file(link_to.clone())?;
+    }
+
+    std::fs::soft_link(pic_from, link_to)?;
+
+    Ok(())
 }
