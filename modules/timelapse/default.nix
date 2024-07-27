@@ -78,7 +78,7 @@ in {
               User = "${user}";
               Group = "${group}";
               Restart = "on-failure";
-              ExecStart = ''${lib.getBin timelapse}/bin/timelapse -n ${name} -u ${instanceCfg.url} -i ${toString cfg.interval} -p ${cfg.dataDir}/pics/${name} -s ${cfg.dataDir}/${name}.lock -v ${cfg.dataDir}/videos/${name}'';
+              ExecStart = ''${lib.getBin timelapse}/bin/timelapse -n ${name} -u ${instanceCfg.url} -i ${toString cfg.interval} -p ${cfg.dataDir}/pics/${name} -s ${cfg.dataDir}/${name}.lock -v ${cfg.dataDir}/videos/${name} -c ${cfg.dataDir}/current'';
               WorkingDirectory = cfg.dataDir;
             };
 

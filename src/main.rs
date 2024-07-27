@@ -23,6 +23,8 @@ struct Cli {
     #[arg(short, long)]
     picture_folder: PathBuf,
     #[arg(short, long)]
+    current_picture_folder: PathBuf,
+    #[arg(short, long)]
     video_folder: String,
     #[arg(short, long)]
     status_file: PathBuf,
@@ -112,7 +114,13 @@ fn main() -> anyhow::Result<()> {
         }
 
         let start = Instant::now();
-        if let Err(e) = dh.make_picture(status.get_index(), &cli.url, &cli.picture_folder) {
+        if let Err(e) = dh.make_picture(
+            &cli.name,
+            status.get_index(),
+            &cli.url,
+            &cli.picture_folder,
+            &cli.current_picture_folder,
+        ) {
             log::error!("{}", e);
             sleep = Duration::from_secs(1);
             continue;
