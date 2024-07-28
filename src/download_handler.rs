@@ -61,7 +61,7 @@ impl DownloadHandler {
         f.flush()?;
 
         if let Err(e) = link_snapshot(instance_name, &pic, snapshot_location) {
-            log::error!("{}", e);
+            log::error!("link error: {}", e);
         }
 
         Ok(())
