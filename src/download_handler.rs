@@ -73,7 +73,9 @@ fn link_snapshot(
     pic_from: &Path,
     snapshot_location: &Path,
 ) -> anyhow::Result<()> {
+    log::warn!("1");
     if !snapshot_location.exists() {
+        log::warn!("11");
         std::fs::create_dir_all(snapshot_location)?;
     }
 
@@ -81,11 +83,15 @@ fn link_snapshot(
     link_to.push(snapshot_location);
     link_to.push(format!("{}.jpg", instance_name));
 
+    log::warn!("2");
     if link_to.exists() {
+        log::warn!("22");
         std::fs::remove_file(link_to.clone())?;
     }
 
+    log::warn!("3");
     std::fs::soft_link(pic_from, link_to)?;
+    log::warn!("4");
 
     Ok(())
 }
