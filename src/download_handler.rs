@@ -81,14 +81,7 @@ fn link_snapshot(
     link_to.push(snapshot_location);
     link_to.push(format!("{}.jpg", instance_name));
 
-    if link_to.exists() {
-        std::fs::remove_file(link_to.clone())?;
-    }
-
-    match std::fs::remove_file(link_to.clone()) {
-        Ok(_) => {}
-        Err(e) => log::warn!("remove file error {}", e),
-    }
+    let _ = std::fs::remove_file(link_to.clone());
 
     std::fs::soft_link(pic_from, link_to)?;
 
